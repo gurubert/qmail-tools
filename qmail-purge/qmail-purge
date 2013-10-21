@@ -1,0 +1,9 @@
+#!/bin/sh
+
+if [ "$1" = "-a" -o "$1" = "--all" ]; then
+  touch -d '1 week ago' /var/qmail/queue/info/*/*
+else
+  for i in $@; do
+    touch -d '1 week ago' /var/qmail/queue/info/*/$i
+  done
+fi
