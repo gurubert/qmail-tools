@@ -1,0 +1,10 @@
+#!/bin/sh
+
+exec 2>&1
+
+if [ ! -r /var/qmail/control/defaultdelivery ]; then
+  echo "/var/qmail/control/defaultdelivery unreadable"
+  exit 1
+fi
+
+exec env - PATH="/var/qmail/bin:$PATH" qmail-start "`cat /var/qmail/control/defaultdelivery`"

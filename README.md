@@ -14,3 +14,8 @@ qmail-purge
 -----------
 
 Sets age of queuefile with id to one week ago. This purges the email with the next queue run.
+
+supervise
+---------
+
+Scripts to run qmail under /service
