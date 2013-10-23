@@ -1,0 +1,20 @@
+#!/bin/sh
+
+#
+# create qmail users and groups
+#
+
+if [ -x /usr/sbin/useradd -a -x /usr/sbin/groupadd ]; then
+ # Linux
+
+ /usr/sbin/groupadd nofiles -r
+ /usr/sbin/useradd -g nofiles -d /var/qmail/alias alias -r
+ /usr/sbin/useradd -g nofiles -d /var/qmail qmaild -r
+ /usr/sbin/useradd -g nofiles -d /var/qmail qmaill -r
+ /usr/sbin/useradd -g nofiles -d /var/qmail qmailp -r
+ /usr/sbin/groupadd qmail -r
+ /usr/sbin/useradd -g qmail -d /var/qmail qmailq -r
+ /usr/sbin/useradd -g qmail -d /var/qmail qmailr -r
+ /usr/sbin/useradd -g qmail -d /var/qmail qmails -r
+
+fi
