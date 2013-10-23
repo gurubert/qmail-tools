@@ -10,6 +10,11 @@ Control script to start and stop qmail (and more)
 
 Based on http://www.lifewithqmail.org/qmailctl-script-dt70
 
+qmail-ids
+---------
+
+Creates the qmail users and groups.
+
 qmail-purge
 -----------
 
