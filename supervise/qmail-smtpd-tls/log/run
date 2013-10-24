@@ -1,0 +1,11 @@
+#!/bin/sh
+
+LOGDIR=/var/log/qmail/smtpd
+LOGUSR=qmaill
+
+if [ ! -d $LOGDIR ]; then
+  mkdir -p $LOGDIR
+  chown $LOGUSR: $LOGDIR
+fi
+
+exec /usr/bin/setuidgid $LOGUSR /usr/bin/multilog t s16777215 n42 $LOGDIR

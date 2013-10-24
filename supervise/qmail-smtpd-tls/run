@@ -1,0 +1,31 @@
+#!/bin/sh
+
+exec 2>&1
+
+QMAILDUID=`id -u qmaild`
+NOFILESGID=`id -g qmaild`
+MAXSMTPD=`cat /var/qmail/control/concurrencyincoming`
+LOCAL=`head -1 /var/qmail/control/me`
+LOCALIP=0
+LOCALPORT=smtp
+TCPRULES=/var/qmail/etc/tcp.smtp.cdb
+DATABYTES=`cat /var/qmail/control/databytes 2> /dev/null || echo 15728640`
+
+export UCSPITLS=""
+. /var/qmail/ssl/env
+
+if [ -z "$QMAILDUID" -o -z "$NOFILESGID" -o -z "$MAXSMTPD" -o -z "$LOCAL" ]; then
+    echo QMAILDUID, NOFILESGID, MAXSMTPD, or LOCAL is unset in
+    echo /var/qmail/supervise/qmail-smtpd/run
+    exit 1
+fi
+
+if [ ! -f /var/qmail/control/rcpthosts ]; then
+    echo "No /var/qmail/control/rcpthosts!"
+    echo "Refusing to start SMTP listener because it'll create an open relay"
+    exit 1
+fi
+
+exec /usr/bin/softlimit -m `expr $DATABYTES \* 4` \
+    /usr/local/bin/sslserver -v -R -x "$TCPRULES" -c "$MAXSMTPD" -l "$LOCAL" \
+        -u "$QMAILDUID" -g "$NOFILESGID" "$LOCALIP" "$LOCALPORT" /var/qmail/bin/qmail-smtpd /bin/false

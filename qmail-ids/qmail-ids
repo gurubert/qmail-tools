@@ -17,4 +17,7 @@ if [ -x /usr/sbin/useradd -a -x /usr/sbin/groupadd ]; then
  /usr/sbin/useradd -g qmail -d /var/qmail qmailr -r
  /usr/sbin/useradd -g qmail -d /var/qmail qmails -r
 
+ /usr/sbin/groupadd qmailssl -r
+ /usr/sbin/useradd -g qmailssl -d /var/qmail/ssl qmailssl -r
+
 fi
