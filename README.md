@@ -24,3 +24,8 @@ supervise
 ---------
 
 Scripts to run qmail under /service
+
+create-recipients
+-----------------
+
+A script to populate the database for the recipients extension of SPAMCONTROL.
