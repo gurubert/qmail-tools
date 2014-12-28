@@ -80,7 +80,11 @@ def get_users_assign():
 def get_alias():
     input = execute("/bin/ls /var/qmail/alias/.qmail-* | cut -f 2- -d - | tr [:] [.]").split("\n")
     input.sort()
-    return process_aliases(input)
+    output = []
+    for alias in process_aliases(input):
+        for local in locals:
+            output.append("%s@%s" % ( alias, local ))
+    return output
 
 def get_virtualdomains():
     output = []
@@ -100,13 +104,11 @@ def get_virtualdomains():
             parts = user.split('-')
             if len(parts) > 1:
                 userpart = parts[0]
-                extension = "-".join(parts[1:])
-                valiases = execute("ls -a /var/qmail/alias/.qmail-%s-%s-* 2>/dev/null | cut -f 2- -d - | tr [:] [.]" % (
-                                                                                                                         userpart,
+                extension = "%s-" % "-".join(parts[1:])
+                valiases = execute("ls -a /var/qmail/alias/.qmail-%s-%s-* 2>/dev/null | cut -f 2- -d - | tr [:] [.]" % ( userpart,
                                                                                                                          extension)).split("\n")
                 if valiases == ['']:
-                    valiases = execute("ls -a ~%s/.qmail-%s-* 2>/dev/null | cut -f 2- -d - | tr [:] [.]" % ( 
-                                                                                                             userpart,
+                    valiases = execute("ls -a ~%s/.qmail-%s-* 2>/dev/null | cut -f 2- -d - | tr [:] [.]" % ( userpart,
                                                                                                              extension)).split("\n")
                     uservdomain = 1
             else:
@@ -118,7 +120,7 @@ def get_virtualdomains():
             # print uservdomain, valiases, process_aliases(valiases)
             for valias in process_aliases(valiases):
                 if uservdomain:
-                    realvalias = valias[len(extension)+1:]
+                    realvalias = valias[len(extension):]
                 else:
                     realvalias = valias[len(user)+1:]
                 # print host, vdomain, user, extension, valias, realvalias, len(realvalias)
