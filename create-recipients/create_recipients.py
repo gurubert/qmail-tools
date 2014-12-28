@@ -40,11 +40,13 @@ def process_aliases(aliaslist):
     output = []
     for alias in aliaslist:
         if alias[-8:] == "-default":
-            if alias[:-8] in output:
-                continue
             if alias[-15:] == "-accept-default" or alias[-15:] == "-reject-default" or alias[-15:] == "-return-default":
                 if alias[:-15] in output:
                     continue
+            if alias[:-7] not in output:
+                output.append(alias[:-7])
+            if alias[:-8] in output:
+                continue
             alias = alias[:-8]
         if alias[-6:] == "-owner":
             if alias[:-6] in output:
